@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="profile_styles.css">
+</head>
+<body>
+    <div class="profile-container">
+        <h2>User Profile</h2>
+        <div id="user-info">
+        </div>
+        <button id="logout-btn">Logout</button>
+        <div id="redirect-message"></div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+
+        fetch(`/users?username=${username}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const userInfoDiv = document.getElementById('user-info');
+                if (data) {
+                    userInfoDiv.innerHTML = `
+                        <p><strong>User ID:</strong> ${data.username}</p>
+                        <p><strong>Name:</strong> ${data.fullname}</p>
+                        <p><strong>Email:</strong> ${data.email}</p>
+                    `;
+                } else {
+                    userInfoDiv.innerHTML = '<p>User not found</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            window.location.href = '../login/login.html';
+        });
+
+        const redirectMessageDiv = document.getElementById('redirect-message');
+        let countdown = 3;
+        redirectMessageDiv.innerHTML = `Redirecting in ${countdown}...`;
+
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                redirectMessageDiv.innerHTML = `Redirecting in ${countdown}...`;
+            } else {
+                clearInterval(countdownInterval);
+                localStorage.setItem('username', username);
+                window.location.href = '../index.html';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

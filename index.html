@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Web Gallery - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <h1>Online Art Gallery</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Artists</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="login/login.html">Login</a></li>
+            <li><a href="signup/signup.html">Signup</a></li>
+            <li id="username-display"></li>
+            <li><button id="logout-btn" class="hidden">Logout</button></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <h2 id="dynamic-text"></h2>
+        <p>Explore and discover beautiful artworks from talented artists around the world.</p>
+        <a href="#" class="explore-now-button">Explore Now</a>
+    </section>
+
+    <section class="featured-art">
+        <h3>Categories</h3>
+        <div class="art-grid" id="art-grid">
+
+        </div>
+    </section>
+
+    <section class="about-us">
+        <h3>About Online Web Gallery</h3>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, animi asperiores culpa dignissimos doloribus eos fugiat impedit maiores nam necessitatibus neque, nisi odio perspiciatis porro quasi quia quos totam voluptates? Aspernatur expedita itaque laboriosam maiores nam odit pariatur tempore, voluptate.
+        </p>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias, aliquam animi asperiores atque dicta dolorum eveniet ex exercitationem incidunt libero magni nobis nulla numquam odio perferendis quas sequi sunt unde?
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 FAD TEAM 3.</p>
+    <div class="social-media">
+        <a href="https://facebook.com/fad-team-3" target="_blank" aria-label="Facebook">Facebook</a>
+        <a href="https://instagram.com/fad-team-3" target="_blank" aria-label="Instagram">Instagram</a>
+        <a href="https://twitter.com/fad-team-3" target="_blank" aria-label="Twitter">Twitter</a>
+    </div>
+</footer>
+
+<script>
+    const username = localStorage.getItem('username');
+    const logoutBtn = document.getElementById('logout-btn');
+    const loginLink = document.querySelector('nav ul li a[href="login/login.html"]');
+
+    if (username) {
+        document.getElementById('username-display').innerText = `Welcome, ${username}`;
+        logoutBtn.classList.remove('hidden');
+        loginLink.classList.add('hidden');
+    } else {
+        logoutBtn.classList.add('hidden');
+        loginLink.classList.remove('hidden');
+    }
+
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('username');
+        window.location.href = 'login/login.html';
+    });
+</script>
+</body>
+</html>

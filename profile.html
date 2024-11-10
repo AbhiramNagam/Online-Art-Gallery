@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="profile-container">
+    <h2>Profile</h2>
+    <form id="profile-form">
+        <div class="input-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" readonly>
+        </div>
+        <div class="input-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="input-group">
+            <label for="fullname">Full Name:</label>
+            <input type="text" id="fullname" name="fullname" required>
+        </div>
+        <div class="input-group">
+            <button type="submit">Update</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Not authenticated');
+            window.location.href = 'login/login.html';
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/user', {
+                headers: { 'Authorization': token }
+            });
+            const user = await response.json();
+            if (response.ok) {
+                document.getElementById('username').value = user.username;
+                document.getElementById('email').value = user.email;
+                document.getElementById('fullname').value = user.fullname;
+            } else {
+                alert(user.message);
+                window.location.href = 'login/login.html';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
+        document.getElementById('profile-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const fullname = document.getElementById('fullname').value;
+
+            try {
+                const response = await fetch('/api/user', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify({ email, fullname })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Profile updated successfully');
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+</script>
+</body>
+</html>
